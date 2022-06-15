@@ -1,0 +1,79 @@
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.util.*;
+import java.sql.*;
+
+
+public class Show extends HttpServlet{
+	public void doGet(HttpServletRequest req,HttpServletResponse res)
+	throws ServletException,IOException
+	{
+		final String DB_Driver = "com.mysql.cj.jdbc.Driver";
+		final String DB_URL = "jdbc:mysql://localhost/test";
+		final String USER = "root";
+		final String PASS = "ssn@123";
+		try{
+			Class.forName(DB_Driver);
+			Connection conct=DriverManager.getConnection(DB_URL,USER,PASS);
+			Statement stm=conct.createStatement();
+			String sql="select * from train;";
+			ResultSet rs=stm.executeQuery(sql);
+			PrintWriter pw=res.getWriter();
+			while(rs.next())
+			{
+				if(rs.getString("t_no").compareTo(req.getParameter("t_no"))==0){
+					pw.println(rs.getString("t_no"));
+					pw.println(rs.getString("source"));
+					pw.println(rs.getString("destination"));
+				}
+			}
+		}
+
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Login - Covid Vaccine Registration System</title>
+<style>
+    body{
+        background-color: aqua;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<div>
+    <h1>Admin Login</h1>
+<form action="login.js" onsubmit="return validate()" method="post">
+Username : <input type="text" name="username" id="username"/> <br><br>
+Password : <input type="password" name="password" id="password" /> <br
+><br>
+<input type="submit" name="submit" value="Submit">
+</form>
+</div>
+<script type="text/javascript">
+function validate() {
+var username = document.getElementById('username');
+var password = document.getElementById('password');
+if (username.value=='admin' && password.value=='admin') {
+alert('Logged in.');
+return true;
+}
+else {
+alert('Invalid username or password.');
+return false;
+}
+}
+</script>
+</body>
+</html>
